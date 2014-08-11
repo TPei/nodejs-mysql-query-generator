@@ -1,7 +1,8 @@
 nodejs-mysql-query-generator
 ============================
 
-parses optional get parameters of a nodejs get request url and generates a mysql query
+- parses optional get parameters of a nodejs get request url and generates a mysql query
+- usage e.g. in REST API with extensive optional parameters for filtering
 
 provides two functions:
 -----------------------
@@ -70,6 +71,9 @@ NPM
 ---
 [Check it out at NPM!](https://www.npmjs.org/package/mysql-query-generator).
 npm install mysql-query-generator
+
+### Originally intended as an addition to [query-sql](https://www.npmjs.org/package/query-sql).
+Easily generate simple queries using query-sql automatically parse url get string and add the result as where clause for more extensive filtering.
 
 License
 -------
