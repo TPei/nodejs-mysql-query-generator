@@ -20,16 +20,16 @@ column: column to be filtered
 modifier: type of filtering action
 value: value to be filtered for
 
-currently supported query modifiers:
+###currently supported query modifiers:
 modifier => mysql code => example
 
-general:
+###general:
 is => "=" => where column = value
 
-strings only
+###strings only
 contains => "like" => where column like '%value%'
 
-numbers only:
+###numbers only:
 less => "<" => where column < value
 lessOrEqual => "<=" => where column <= value
 greater => ">" => where column > value
@@ -37,7 +37,7 @@ greaterOrEqual => ">=" => where column >= value
 
 illegal (those that are not supported) modifiers will be ignored
 
-exception
+###exception
 ?limit=value
 limits the returned results to a certain number of entries and doesn't require any modifier
 
@@ -52,6 +52,7 @@ note: name.rocks is an illegal modifier and therefore ignored
 
 usage example:
 --------------
+```js
 app.get('/someUrl', function(req, res){
     var queryGenerator = require('mysql-query-generator');
     var completeQuery = queryGenerator.generateCompleteQuery('id, username, email', 'users', req.url);
@@ -64,7 +65,7 @@ var completeQuery = 'select id, username, email from users ' + queryAddition;
 // assuming a req.url querystring like so: ?username.is=john&email.contains=john.doe&id.greaterOrEqual=10&limit=5
 // the complete query in both cases would be
 var completeQuery = 'select id, username, email from users where name = \'john\' and email like \'%john.doe%\' and id >= 10 limit 5;
-
+```
 NPM
 ---
 [Check it out at NPM!](https://www.npmjs.org/package/mysql-query-generator).
