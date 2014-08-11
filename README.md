@@ -73,7 +73,7 @@ NPM
 npm install mysql-query-generator
 
 ### Originally intended as an addition to [query-sql](https://www.npmjs.org/package/query-sql).
-Easily generate simple queries using query-sql automatically parse url get string and add the result as where clause for more extensive filtering.
+Easily generate simple queries using query-sql. Then automatically parse url get string and add the result as where clause for more extensive filtering.
 
 License
 -------
