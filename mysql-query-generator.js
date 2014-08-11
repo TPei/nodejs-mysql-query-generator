@@ -4,6 +4,15 @@
  */
 
 /**
+ * create QueryGenerator object with or without default return entry count limit
+ * @param optional defaultLimit
+ * @constructor
+ */
+function QueryGenerator(defaultLimit) {
+    this.limit = defaultLimit;
+}
+
+/**
  * handles optional query parameters from given request url
  *
  * format ?columnName.queryType=value
@@ -13,7 +22,7 @@
  * e.g. WHERE name = 'value' and country like '%{ger}%' and year <= 2011 and year >= 2008
  * that can then be added to the base query e.g. select * from 'table'
  */
-module.exports.generateQueryAddition = function(url) {
+QueryGenerator.prototype.generateQueryAddition = function(url) {
     var queryObject = getQueryObject(url);
 
     // dictionary of allowed queries
@@ -31,12 +40,23 @@ module.exports.generateQueryAddition = function(url) {
     queryDictionary['greater'] = '>';
     queryDictionary['greaterOrEqual'] = '>=';
 
+    if(this.limit)
+    // number of returned entries is limited to a set number of entries
+        if(!queryObject['limit'] || queryObject['limit'] > this.limit)
+        // must be string like all arguments that are pulled from query string
+            queryObject['limit'] = '' + this.limit;
+
     var queryString = ' where ';
     for(var property in queryObject){
 
         var column = property.split('.')[0];
         var query = queryDictionary[property.split('.')[1]];
         var value = queryObject[property];
+
+        // escape string detection to protect against mysql injections
+        if(value.match(/[_\W]/)) {
+            continue;
+        }
 
         // mysql like queries look like this:
         // where name like %nameColumnStringContainsThisSubstring%
@@ -63,9 +83,9 @@ module.exports.generateQueryAddition = function(url) {
         else
             queryString += column + ' ' + query + ' ' + value + ' and ';
     }
+
     queryString = queryString.substring(0, queryString.length-5) + ';';
 
-    console.log(queryString);
     return queryString;
 };
 
@@ -77,7 +97,7 @@ module.exports.generateQueryAddition = function(url) {
  * @param url
  * @returns {string}
  */
-module.exports.generateCompleteQuery = function(selector, table, url) {
+QueryGenerator.prototype.generateCompleteQuery = function(selector, table, url) {
     var queryAddition = module.exports.generateQueryAddition(url);
     return 'select ' + selector + ' from ' + table + queryAddition;
 }
@@ -95,3 +115,5 @@ function getQueryObject(url) {
     var querystring = urlParser.parse(url);
     return querystringParser.parse(querystring['query']);
 }
+
+module.exports = QueryGenerator;

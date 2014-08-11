@@ -4,6 +4,14 @@ nodejs-mysql-query-generator
 - parses optional get parameters of a nodejs get request url and generates a mysql query
 - usage e.g. in REST API with extensive optional parameters for filtering
 
+Constructor:
+------------
+```js
+new QueryGenerator(defaultLimit);
+```
+For security reasons the construtor allows for providing a default limit value.
+So if don't ever want to return more than x values, just put it in the constructor. If not, just leave it empty.
+
 provides two functions:
 -----------------------
 function generateCompleteQuery(selector, table, url)
@@ -55,18 +63,30 @@ usage example:
 --------------
 ```js
 app.get('/someUrl', function(req, res){
-    var queryGenerator = require('mysql-query-generator');
-    var completeQuery = queryGenerator.generateCompleteQuery('id, username, email', 'users', req.url);
+    var QueryGenerator = require('mysql-query-generator');
+    var handler = new QueryGenerator(100);
+    var completeQuery = handler.generateCompleteQuery('id, username, email', 'users', req.url);
 });
 
 // or:
-var queryAddition = queryGenerator.generateQueryAddition(req.url);
+var QueryGenerator = require('mysql-query-generator');
+var handler = new QueryGenerator(100);
+var queryAddition = handler.generateQueryAddition(req.url);
 var completeQuery = 'select id, username, email from users ' + queryAddition;
 
 // assuming a req.url querystring like so: ?username.is=john&email.contains=john.doe&id.greaterOrEqual=10&limit=5
 // the complete query in both cases would be
 var completeQuery = 'select id, username, email from users where name = \'john\' and email like \'%john.doe%\' and id >= 10 limit 5;
 ```
+
+Security as of v0.2.0
+------------------------
+### Injections
+To prevent sql injections, special characters not allowed.
+
+### Limit number of returned entries
+You can provide a default limit in the constructor to make sure no more than that number of entries is returned.
+
 NPM
 ---
 [Check it out at NPM!](https://www.npmjs.org/package/mysql-query-generator).
