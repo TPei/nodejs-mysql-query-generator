@@ -35,6 +35,8 @@ QueryGenerator.prototype.generateQueryAddition = function(url) {
     // string only
     queryDictionary['contains'] = 'like';
     queryDictionary['containsNot'] = 'not like';
+    queryDictionary['startsWith'] = 'like %';
+    queryDictionary['endsWith'] = '% like';
 
     // number only
     queryDictionary['less'] = '<';
@@ -81,13 +83,41 @@ QueryGenerator.prototype.generateQueryAddition = function(url) {
 
         // mysql like queries look like this:
         // where name like %nameColumnStringContainsThisSubstring%
+        switch(modifier){
+            case 'like':
+            case 'not like':
+                value = '%' + value + '%';
+                break;
+            case 'like %':
+                value += '%';
+                modifier = 'like';
+                break;
+            case '% like':
+                value = '%' + value;
+                modifier = 'like';
+                break;
+            case undefined:
+            case null:
+                if(column != 'limit')
+                    continue;
+                break;
+        }
+
+        /*
+        // mysql like queries look like this:
+        // where name like %nameColumnStringContainsThisSubstring%
         if(modifier == 'like' || modifier == 'not like')
             value = '%'+value+'%';
+        else if(modifier == 'like %'){
+            value += '%';
+            modifier = 'like';
+        }
         else if((modifier == undefined || modifier == null) && column != 'limit')
             continue;
-
+*/
         // non-number values must be encased by apostrophes like so:
         // where name = 'bla'
+
         if(isNaN(value))
             value = '\''+value+'\'';
 
