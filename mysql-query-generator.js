@@ -29,10 +29,12 @@ QueryGenerator.prototype.generateQueryAddition = function(url) {
     var queryDictionary = {};
     // general
     queryDictionary['is'] = '=';
+    queryDictionary['isNot'] = '!=';
     queryDictionary['limit'] = 'limit';
 
     // string only
     queryDictionary['contains'] = 'like';
+    queryDictionary['containsNot'] = 'not like';
 
     // number only
     queryDictionary['less'] = '<';
@@ -79,7 +81,7 @@ QueryGenerator.prototype.generateQueryAddition = function(url) {
 
         // mysql like queries look like this:
         // where name like %nameColumnStringContainsThisSubstring%
-        if(modifier == 'like')
+        if(modifier == 'like' || modifier == 'not like')
             value = '%'+value+'%';
         else if((modifier == undefined || modifier == null) && column != 'limit')
             continue;

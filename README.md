@@ -105,3 +105,5 @@ License
 
 [MIT](http://cheeaun.mit-license.org/)
 
+Here, have some [fun](http://superuser.com/questions/792607/why-does-windows-think-that-my-wireless-keyboard-is-a-toaster).
+
