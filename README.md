@@ -79,10 +79,15 @@ var completeQuery = 'select id, username, email from users ' + queryAddition;
 var completeQuery = 'select id, username, email from users where name = \'john\' and email like \'%john.doe%\' and id >= 10 limit 5;
 ```
 
-Security as of v0.2.0
+Security as of v0.2.1
 ------------------------
 ### Injections
-To prevent sql injections, special characters not allowed.
+To prevent sql injections certain characters and keywords are not allowed like:
+- quotes
+- whitespaces
+- sql boolean / select keywords
+- file operations
+- timing
 
 ### Limit number of returned entries
 You can provide a default limit in the constructor to make sure no more than that number of entries is returned.

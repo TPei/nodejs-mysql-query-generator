@@ -5,7 +5,7 @@
 
 /**
  * create QueryGenerator object with or without default return entry count limit
- * @param optional defaultLimit
+ * @param defaultLimit
  * @constructor
  */
 function QueryGenerator(defaultLimit) {
@@ -47,22 +47,41 @@ QueryGenerator.prototype.generateQueryAddition = function(url) {
             queryObject['limit'] = '' + this.limit;
 
     var queryString = ' where ';
+
     for(var property in queryObject){
 
-        var column = property.split('.')[0];
-        var query = queryDictionary[property.split('.')[1]];
-        var value = queryObject[property];
 
-        // escape string detection to protect against mysql injections
-        if(value.match(/[_\W]/)) {
+        // --------------------------------------------------------------- //
+        // mysql injection protection
+
+        // gonna allow whitespaces for name filtering
+        //if(queryObject[property].match(/\s/)) // no whitespaces allowed
+        //continue;
+
+        if(queryObject[property].match(/[\'"]/)) // no quotes allowed
             continue;
-        }
+        if(queryObject[property].match(/[\/\\\\]/)) // no slashes allowed
+            continue;
+        if(queryObject[property].match(/(and|or|null|not)/i)) // no sqli boolean keywords allowed
+            continue;
+        if(queryObject[property].match(/(union|select|from|where)/i)) // no sqli select keywords allowed
+            continue;
+        if(queryObject[property].match(/(into|file)/i)) // no file operations allowed
+            continue;
+        if(queryObject[property].match(/(benchmark|sleep)/i)) // no timing allowed
+            continue;
+
+        // --------------------------------------------------------------- //
+        // split that
+        var column = property.split('.')[0];
+        var modifier = queryDictionary[property.split('.')[1]];
+        var value = queryObject[property];
 
         // mysql like queries look like this:
         // where name like %nameColumnStringContainsThisSubstring%
-        if(query == 'like')
+        if(modifier == 'like')
             value = '%'+value+'%';
-        else if((query == undefined || query == null) && column != 'limit')
+        else if((modifier == undefined || modifier == null) && column != 'limit')
             continue;
 
         // non-number values must be encased by apostrophes like so:
@@ -81,7 +100,7 @@ QueryGenerator.prototype.generateQueryAddition = function(url) {
                 queryString += column + ' ' + value + ' and ';
         }
         else
-            queryString += column + ' ' + query + ' ' + value + ' and ';
+            queryString += column + ' ' + modifier + ' ' + value + ' and ';
     }
 
     queryString = queryString.substring(0, queryString.length-5) + ';';
