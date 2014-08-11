@@ -1,0 +1,27 @@
+{
+    "name": "mysql-query-generator",
+    "description": "parses optional get parameters of a nodejs request url and generates a mysql query",
+    "version": "0.0.1",
+    "main": "mysql-query-generator",
+    "keywords": [
+        "mysql"
+    ],
+    "author": {
+        "name": "Thomas Peikert",
+        "email": "dragon5689@gmx.net"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/TPei/nodejs-mysql-query-generator.git"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "https://raw.githubusercontent.com/TPei/nodejs-mysql-query-generator/master/LICENSE"
+        }
+    ],
+    "bugs": {
+        "url": "https://github.com/TPei/nodejs-mysql-query-generator/issues"
+    },
+    "homepage": "https://github.com/TPei/nodejs-mysql-query-generator/"
+}
