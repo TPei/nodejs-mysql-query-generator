@@ -91,7 +91,7 @@ QueryGenerator.prototype.generateQueryAddition = function(url) {
         if(isNaN(value))
             value = '\''+value+'\'';
 
-        // limit must be last argument
+        // limit can't come after 'and' or 'where'
         if(column == 'limit'){
             if(queryString == ' where ')
                 queryString = ' ' + column + ' ' + value + ' and ';
