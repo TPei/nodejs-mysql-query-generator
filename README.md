@@ -65,17 +65,12 @@ usage example:
 app.get('/someUrl', function(req, res){
     var QueryGenerator = require('mysql-query-generator');
     var handler = new QueryGenerator(100);
-    var completeQuery = handler.generateCompleteQuery('id, username, email', 'users', req.url);
+    var queryAddition = handler.generateQueryAddition(req.url);
+    var completeQuery = 'select id, username, email from users ' + queryAddition;
 });
 
-// or:
-var QueryGenerator = require('mysql-query-generator');
-var handler = new QueryGenerator(100);
-var queryAddition = handler.generateQueryAddition(req.url);
-var completeQuery = 'select id, username, email from users ' + queryAddition;
-
 // assuming a req.url querystring like so: ?username.is=john&email.contains=john.doe&id.greaterOrEqual=10&limit=5
-// the complete query in both cases would be
+// the complete query would be
 var completeQuery = 'select id, username, email from users where name = \'john\' and email like \'%john.doe%\' and id >= 10 limit 5;
 ```
 
