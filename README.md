@@ -29,20 +29,20 @@ value: value to be filtered for
 modifier => mysql code => example
 
 ###general:
-is => "=" => where column = value
-siNot => "!=" => where column != value
+- is => "=" => where column = value
+- isNot => "!=" => where column != value
 
 ###strings only
-contains => "like" => where column like '%value%'
-containsNot => "not like" => where column not like '%value%'
-startsWith => "like value%" => where columne like 'value%'
-endsWith => "like %value" => where columne like '%value'
+- contains => "like" => where column like '%value%'
+- containsNot => "not like" => where column not like '%value%'
+- startsWith => "like value%" => where columne like 'value%'
+- endsWith => "like %value" => where columne like '%value'
 
 ###numbers only:
-less => "<" => where column < value
-lessOrEqual => "<=" => where column <= value
-greater => ">" => where column > value
-greaterOrEqual => ">=" => where column >= value
+- less => "<" => where column < value
+- lessOrEqual => "<=" => where column <= value
+- greater => ">" => where column > value
+- greaterOrEqual => ">=" => where column >= value
 
 illegal (those that are not supported) modifiers will be ignored
 
@@ -55,7 +55,7 @@ query example:
 ?name.rocks=7&email.contains=@gmail&id.greater=10&id.lessOrEqual=100&limit=8
 
 would return
-where email like '%@gmail%' and id > 10 and id <= 100 limit 8;
+"where email like '%@gmail%' and id > 10 and id <= 100 limit 8;"
 
 note: name.rocks is an illegal modifier and therefore ignored
 
