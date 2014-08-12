@@ -12,14 +12,10 @@ new QueryGenerator(defaultLimit);
 For security reasons the construtor allows for providing a default limit value.
 So if don't ever want to return more than x values, just put it in the constructor. If not, just leave it empty.
 
-provides two functions:
------------------------
-function generateCompleteQuery(selector, table, url)
-- takes mysql query selector, targeted table and nodejs req.url object and returns complete mysql query
-e.g. generateCompleteQuery('id, name, description', 'users', req.url)
-
+provides:
+---------
 function generateQueryAddition(url)
-- takes only req url and generates a mysql addition query that can be added to a base query
+- takes req.url object and generates a mysql addition query that can be added to a base query
 
 req.url query format
 --------------------
@@ -34,9 +30,13 @@ modifier => mysql code => example
 
 ###general:
 is => "=" => where column = value
+siNot => "!=" => where column != value
 
 ###strings only
 contains => "like" => where column like '%value%'
+containsNot => "not like" => where column not like '%value%'
+startsWith => "like value%" => where columne like 'value%'
+endsWith => "like %value" => where columne like '%value'
 
 ###numbers only:
 less => "<" => where column < value
@@ -79,15 +79,12 @@ var completeQuery = 'select id, username, email from users ' + queryAddition;
 var completeQuery = 'select id, username, email from users where name = \'john\' and email like \'%john.doe%\' and id >= 10 limit 5;
 ```
 
-Security as of v0.2.1
+Security as of v0.3.0
 ------------------------
 ### Injections
 To prevent sql injections certain characters and keywords are not allowed like:
 - quotes
 - whitespaces
-- sql boolean / select keywords
-- file operations
-- timing
 
 ### Limit number of returned entries
 You can provide a default limit in the constructor to make sure no more than that number of entries is returned.
@@ -102,6 +99,5 @@ Easily generate simple queries using query-sql. Then automatically parse url get
 
 License
 -------
-
 [MIT](http://cheeaun.mit-license.org/)
 

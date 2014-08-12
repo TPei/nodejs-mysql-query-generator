@@ -66,14 +66,16 @@ QueryGenerator.prototype.generateQueryAddition = function(url) {
             continue;
         if(queryObject[property].match(/[\/\\\\]/)) // no slashes allowed
             continue;
-        if(queryObject[property].match(/(and|or|null|not)/i)) // no sqli boolean keywords allowed
+
+        // probably needs to be allowed for name filtering
+        /*if(queryObject[property].match(/(and|or|null|not)/i)) // no sqli boolean keywords allowed
             continue;
         if(queryObject[property].match(/(union|select|from|where)/i)) // no sqli select keywords allowed
             continue;
         if(queryObject[property].match(/(into|file)/i)) // no file operations allowed
             continue;
         if(queryObject[property].match(/(benchmark|sleep)/i)) // no timing allowed
-            continue;
+            continue;*/
 
         // --------------------------------------------------------------- //
         // split that
@@ -81,7 +83,8 @@ QueryGenerator.prototype.generateQueryAddition = function(url) {
         var modifier = queryDictionary[property.split('.')[1]];
         var value = queryObject[property];
 
-        // mysql like queries look like this:
+        // --------------------------------------------------------------- //
+        // filter mysql like queries, which look like this:
         // where name like %nameColumnStringContainsThisSubstring%
         switch(modifier){
             case 'like':
@@ -102,21 +105,6 @@ QueryGenerator.prototype.generateQueryAddition = function(url) {
                     continue;
                 break;
         }
-
-        /*
-        // mysql like queries look like this:
-        // where name like %nameColumnStringContainsThisSubstring%
-        if(modifier == 'like' || modifier == 'not like')
-            value = '%'+value+'%';
-        else if(modifier == 'like %'){
-            value += '%';
-            modifier = 'like';
-        }
-        else if((modifier == undefined || modifier == null) && column != 'limit')
-            continue;
-*/
-        // non-number values must be encased by apostrophes like so:
-        // where name = 'bla'
 
         if(isNaN(value))
             value = '\''+value+'\'';
@@ -139,19 +127,6 @@ QueryGenerator.prototype.generateQueryAddition = function(url) {
 
     return queryString;
 };
-
-/**
- * generate complete mysql query
- *
- * @param selector
- * @param table
- * @param url
- * @returns {string}
- */
-QueryGenerator.prototype.generateCompleteQuery = function(selector, table, url) {
-    var queryAddition = module.exports.generateQueryAddition(url);
-    return 'select ' + selector + ' from ' + table + queryAddition;
-}
 
 /**
  * parses queryobject from url

@@ -1,7 +1,7 @@
 {
     "name": "mysql-query-generator",
     "description": "parses optional get parameters of a nodejs request url and generates a mysql query",
-    "version": "0.2.3",
+    "version": "0.3.0",
     "main": "mysql-query-generator",
     "keywords": [
         "mysql",
