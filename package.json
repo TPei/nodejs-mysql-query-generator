@@ -1,7 +1,7 @@
 {
     "name": "mysql-query-generator",
     "description": "parses optional get parameters of a nodejs request url and generates a mysql query",
-    "version": "0.3.1",
+    "version": "0.3.2",
     "main": "mysql-query-generator",
     "keywords": [
         "mysql",
@@ -26,5 +26,5 @@
     "bugs": {
         "url": "https://github.com/TPei/nodejs-mysql-query-generator/issues"
     },
-    "homepage": "https://github.com/TPei/nodejs-mysql-query-generator/"
+    "homepage": "http://tpei.github.io/nodejs-mysql-query-generator/"
 }
