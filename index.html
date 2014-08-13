@@ -28,37 +28,128 @@
     <div id="content-wrapper">
       <div class="inner clearfix">
         <section id="main-content">
-          <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
+          <div class="highlight highlight-sh"><pre>npm install mysql-query-generator
+</pre></div>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+<ul>
+<li>parses optional get parameters of a nodejs get request url and generates a mysql query</li>
+<li>usage e.g. in REST API with extensive optional parameters for filtering</li>
+</ul><h2>
+<a name="constructor" class="anchor" href="#constructor"><span class="octicon octicon-link"></span></a>Constructor:</h2>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
+<div class="highlight highlight-js"><pre><span class="k">new</span> <span class="nx">QueryGenerator</span><span class="p">(</span><span class="nx">defaultLimit</span><span class="p">);</span>
+</pre></div>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<p>For security reasons the construtor allows for providing a default limit value.
+So if don't ever want to return more than x values, just put it in the constructor. If not, just leave it empty.</p>
+
+<h2>
+<a name="provides" class="anchor" href="#provides"><span class="octicon octicon-link"></span></a>provides:</h2>
+
+<p>function generateQueryAddition(url)</p>
+
+<ul>
+<li>takes req.url object and generates a mysql addition query that can be added to a base query</li>
+</ul><h2>
+<a name="requrl-query-format" class="anchor" href="#requrl-query-format"><span class="octicon octicon-link"></span></a>req.url query format</h2>
+
+<p>/someUrl?column.modifier=value</p>
+
+<p>column: column to be filtered
+modifier: type of filtering action
+value: value to be filtered for</p>
 
 <h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+<a name="currently-supported-query-modifiers" class="anchor" href="#currently-supported-query-modifiers"><span class="octicon octicon-link"></span></a>currently supported query modifiers:</h3>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
-
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<p>modifier =&gt; mysql code =&gt; example</p>
 
 <h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+<a name="general" class="anchor" href="#general"><span class="octicon octicon-link"></span></a>general:</h3>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<ul>
+<li>is =&gt; "=" =&gt; where column = value</li>
+<li>isNot =&gt; "!=" =&gt; where column != value</li>
+</ul><h3>
+<a name="strings-only" class="anchor" href="#strings-only"><span class="octicon octicon-link"></span></a>strings only</h3>
+
+<ul>
+<li>contains =&gt; "like" =&gt; where column like '%value%'</li>
+<li>containsNot =&gt; "not like" =&gt; where column not like '%value%'</li>
+<li>startsWith =&gt; "like value%" =&gt; where columne like 'value%'</li>
+<li>endsWith =&gt; "like %value" =&gt; where columne like '%value'</li>
+</ul><h3>
+<a name="numbers-only" class="anchor" href="#numbers-only"><span class="octicon octicon-link"></span></a>numbers only:</h3>
+
+<ul>
+<li>less =&gt; "&lt;" =&gt; where column &lt; value</li>
+<li>lessOrEqual =&gt; "&lt;=" =&gt; where column &lt;= value</li>
+<li>greater =&gt; "&gt;" =&gt; where column &gt; value</li>
+<li>greaterOrEqual =&gt; "&gt;=" =&gt; where column &gt;= value</li>
+</ul><p>illegal (those that are not supported) modifiers will be ignored</p>
 
 <h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+<a name="exception" class="anchor" href="#exception"><span class="octicon octicon-link"></span></a>exception</h3>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<p>?limit=value
+limits the returned results to a certain number of entries and doesn't require any modifier</p>
+
+<h2>
+<a name="query-example" class="anchor" href="#query-example"><span class="octicon octicon-link"></span></a>query example:</h2>
+
+<p>?name.rocks=7&amp;email.contains=<a href="https://github.com/gmail" class="user-mention">@gmail</a>&amp;id.greater=10&amp;id.lessOrEqual=100&amp;limit=8</p>
+
+<p>would return
+"where email like '%<a href="https://github.com/gmail" class="user-mention">@gmail</a>%' and id &gt; 10 and id &lt;= 100 limit 8;"</p>
+
+<p>note: name.rocks is an illegal modifier and therefore ignored</p>
+
+<h2>
+<a name="usage-example" class="anchor" href="#usage-example"><span class="octicon octicon-link"></span></a>usage example:</h2>
+
+<div class="highlight highlight-js"><pre><span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/someUrl'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">QueryGenerator</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'mysql-query-generator'</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">handler</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">QueryGenerator</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">queryAddition</span> <span class="o">=</span> <span class="nx">handler</span><span class="p">.</span><span class="nx">generateQueryAddition</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">url</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">completeQuery</span> <span class="o">=</span> <span class="s1">'select id, username, email from users '</span> <span class="o">+</span> <span class="nx">queryAddition</span><span class="p">;</span>
+<span class="p">});</span>
+
+<span class="c1">// assuming a req.url querystring like so: ?username.is=john&amp;email.contains=john.doe&amp;id.greaterOrEqual=10&amp;limit=5</span>
+<span class="c1">// the complete query would be</span>
+<span class="kd">var</span> <span class="nx">completeQuery</span> <span class="o">=</span> <span class="s1">'select id, username, email from users where name = \'john\' and email like \'%john.doe%\'</span> <span class="nx">and</span> <span class="nx">id</span> <span class="o">&gt;=</span> <span class="mi">10</span> <span class="nx">limit</span> <span class="mi">5</span><span class="p">;</span>
+</pre></div>
+
+<h2>
+<a name="security-as-of-v030" class="anchor" href="#security-as-of-v030"><span class="octicon octicon-link"></span></a>Security as of v0.3.0</h2>
+
+<h3>
+<a name="injections" class="anchor" href="#injections"><span class="octicon octicon-link"></span></a>Injections</h3>
+
+<p>To prevent sql injections certain characters and keywords are not allowed like:</p>
+
+<ul>
+<li>quotes</li>
+<li>whitespaces</li>
+</ul><h3>
+<a name="limit-number-of-returned-entries" class="anchor" href="#limit-number-of-returned-entries"><span class="octicon octicon-link"></span></a>Limit number of returned entries</h3>
+
+<p>You can provide a default limit in the constructor to make sure no more than that number of entries is returned.</p>
+
+<h2>
+<a name="npm" class="anchor" href="#npm"><span class="octicon octicon-link"></span></a>NPM</h2>
+
+<p><a href="https://www.npmjs.org/package/mysql-query-generator">Check it out at NPM!</a>.
+npm install mysql-query-generator</p>
+
+<h3>
+<a name="originally-intended-as-an-addition-to-query-sql" class="anchor" href="#originally-intended-as-an-addition-to-query-sql"><span class="octicon octicon-link"></span></a>Originally intended as an addition to <a href="https://www.npmjs.org/package/query-sql">query-sql</a>.</h3>
+
+<p>Easily generate simple queries using query-sql. Then automatically parse url get string and add the result as where clause for more extensive filtering.</p>
+
+<h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p><a href="http://cheeaun.mit-license.org/">MIT</a></p>
         </section>
 
         <aside id="sidebar">
