@@ -97,10 +97,10 @@ limits the returned results to a certain number of entries and doesn't require a
 <h2>
 <a name="query-example" class="anchor" href="#query-example"><span class="octicon octicon-link"></span></a>query example:</h2>
 
-<p>?name.rocks=7&amp;email.contains=<a href="https://github.com/gmail" class="user-mention">@gmail</a>&amp;id.greater=10&amp;id.lessOrEqual=100&amp;limit=8</p>
+<p>?name.rocks=7&amp;email.contains=@gmail&amp;id.greater=10&amp;id.lessOrEqual=100&amp;limit=8</p>
 
 <p>would return
-"where email like '%<a href="https://github.com/gmail" class="user-mention">@gmail</a>%' and id &gt; 10 and id &lt;= 100 limit 8;"</p>
+"where email like '%@gmail%' and id &gt; 10 and id &lt;= 100 limit 8;"</p>
 
 <p>note: name.rocks is an illegal modifier and therefore ignored</p>
 
